@@ -81,15 +81,22 @@ The Node.js backend service handles:
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository with submodules:
 ```bash
-git clone <repository-url>
+git clone --recursive <repository-url>
 cd evm_bridge
 ```
 
-2. Install Foundry dependencies:
+**Alternative:** If you already cloned without `--recursive`:
 ```bash
-forge install
+git clone <repository-url>
+cd evm_bridge
+git submodule update --init --recursive
+```
+
+2. Verify dependencies are installed:
+```bash
+ls lib/  # Should show forge-std and openzeppelin-contracts
 ```
 
 3. Build the contracts:
@@ -181,6 +188,34 @@ forge test --match-path test/PortaBridge.t.sol
 # Run tests with gas reporting
 forge test --gas-report
 ```
+
+## Dependencies
+
+This project uses Git submodules to manage dependencies, keeping the repository lightweight while ensuring reproducible builds.
+
+- **OpenZeppelin Contracts** (`lib/openzeppelin-contracts/`): For secure, audited contract implementations
+- **Forge Standard Library** (`lib/forge-std/`): For testing utilities and cheat codes
+
+### Managing Dependencies
+
+**Update dependencies:**
+```bash
+# Update forge-std to latest
+cd lib/forge-std
+git pull origin main
+cd ../..
+git add lib/forge-std
+git commit -m "chore: update forge-std to latest"
+
+# Update OpenZeppelin to specific version
+cd lib/openzeppelin-contracts
+git checkout v5.0.0  # or any specific tag
+cd ../..
+git add lib/openzeppelin-contracts
+git commit -m "chore: update openzeppelin-contracts to v5.0.0"
+```
+
+**For contributors:** Always clone with `--recursive` or run `git submodule update --init --recursive` after pulling changes.
 
 ## Security Considerations
 
